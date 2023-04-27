@@ -14,7 +14,14 @@ import threadRoutes from "./routes/thread.js";
 
 import { register } from "./controllers/auth.js";
 import { verifyToken } from "./middleware/auth.js";
-import { postThread } from "./controllers/thread.js";
+import {
+  getSavedThreads,
+  postThread,
+  saveThread,
+} from "./controllers/thread.js";
+import { test } from "./test.js";
+import { getComments, postComment } from "./controllers/comment.js";
+import { getUser } from "./controllers/user.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -52,8 +59,14 @@ app.post(
 /**
  * ROUTES
  */
+app.get("/u/:userId", getUser);
 app.use("/auth", authRoutes);
 app.use("/thread", threadRoutes);
+app.get("/test", test);
+app.post("/postComment", postComment);
+app.get("/getComments/:commentId", getComments);
+app.post("/thread/saveThread", saveThread);
+app.get("/getsavedThread/:userId", getSavedThreads);
 
 /**
  * MongoDB Setup

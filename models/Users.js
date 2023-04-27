@@ -30,20 +30,40 @@ const UserSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
-    threads: {
-      type: Array,
-      default: [],
-    },
-    followers: {
-      type: Array,
-      default: [],
-    },
+    threads: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Thread",
+        default: [],
+      },
+    ],
+    comments: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Comment",
+        default: [],
+      },
+    ],
+    followers: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        default: [],
+      },
+    ],
     department: {
       type: String,
     },
     year: {
       type: String,
     },
+    saved: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Thread",
+        default: [],
+      },
+    ],
   },
   { timestamps: true },
 );
