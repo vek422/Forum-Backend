@@ -64,6 +64,8 @@ const UserSchema = new mongoose.Schema(
         default: [],
       },
     ],
+    subForum: [{ type: mongoose.Schema.Types.ObjectId, ref: "Subforum" }],
+    joinedSubForum: [{ type: mongoose.Schema.Types.ObjectId, ref: "Subforum" }],
   },
   { timestamps: true },
 );

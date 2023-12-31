@@ -5,8 +5,11 @@ const ThreadSchema = new mongoose.Schema(
     body: { type: String, default: "" },
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      require: true,
       ref: "User",
+    },
+    subForum: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Subforum",
     },
     picturePath: { type: String, default: "" },
     likes: { type: Map, of: Boolean },

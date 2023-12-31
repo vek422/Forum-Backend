@@ -21,8 +21,12 @@ import {
 } from "./controllers/thread.js";
 import { test } from "./test.js";
 import { getComments, postComment } from "./controllers/comment.js";
-import { getUser } from "./controllers/user.js";
-
+import { getUser, searchUser } from "./controllers/user.js";
+import {
+  createSubForum,
+  getSubForum,
+  postSubForumThread,
+} from "./controllers/subforum.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const app = express();
@@ -55,10 +59,14 @@ app.post(
   upload.single("picture"),
   postThread,
 );
+app.post("/subforum/createforum", upload.single("picture"), createSubForum);
+app.post("/subforum/postThread", upload.single("picture"), postSubForumThread);
 
 /**
  * ROUTES
  */
+app.get("/subforum/:subForumId", getSubForum);
+app.get("/u/search/:text", searchUser);
 app.get("/u/:userId", getUser);
 app.use("/auth", authRoutes);
 app.use("/thread", threadRoutes);
@@ -67,7 +75,6 @@ app.post("/postComment", postComment);
 app.get("/getComments/:commentId", getComments);
 app.post("/thread/saveThread", saveThread);
 app.get("/getsavedThread/:userId", getSavedThreads);
-
 /**
  * MongoDB Setup
  */
@@ -78,6 +85,12 @@ mongoose
   })
   .then(() => {
     app.listen(PORT, () => console.log(`Server Running On Port ${PORT}`));
+    const userCollection = mongoose.connection.collection("users");
+    userCollection.createIndex({
+      firstName: "text",
+      lastName: "text",
+      picturePath: "text",
+    });
   })
   .catch((err) => {
     console.log(err);

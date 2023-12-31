@@ -19,7 +19,7 @@ export const postThread = async (req, res) => {
       { _id: userId },
       { $push: { threads: savedThread._id } },
     );
-    res.status(304).json(savedThread);
+    res.status(200).json(savedThread);
   } catch (err) {
     res.status(500).json({ error: err.message });
     console.log(err);
@@ -32,6 +32,7 @@ export const getThreads = async (req, res) => {
 
     const threads = await Thread.find()
       .populate("user", ["firstName", "lastName", "picturePath"])
+      .populate("subForum")
       .limit(limit)
       .skip((page - 1) * limit);
 
@@ -64,7 +65,8 @@ export const getThread = async (req, res) => {
           { path: "user", model: "User" },
           { path: "child", populate: { path: "user", model: "User" } },
         ],
-      });
+      })
+      .populate("subForum");
     if (!requestedThread) {
       return res.status(404).json({ msg: "Not Found!" });
     }

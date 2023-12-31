@@ -53,7 +53,9 @@ export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    var user = await User.findOne({ email: email });
+    var user = await User.findOne({ email: email })
+      .populate("subForum")
+      .populate("joinedSubForum");
 
     if (!user) return res.status(404).json({ msg: "User Does Not Exist" });
 
@@ -72,7 +74,9 @@ export const login = async (req, res) => {
 export const refreshUser = async (req, res) => {
   try {
     const { userId } = req.query;
-    const updatedUser = await User.findById(userId);
+    const updatedUser = await User.findById(userId)
+      .populate("subForum")
+      .populate("joinedSubForum");
     console.log(updatedUser);
     delete updatedUser.password;
     res.status(200).json({ user: updatedUser });
